@@ -1,14 +1,22 @@
-"use client";
+'use client';
 import {Check} from "@gravity-ui/icons";
-import {Button, Description, FieldError, Form, Input, Label, TextField} from "@heroui/react";
+import {Button, Description, FieldError, Form, Input, Label, TextField, toast} from "@heroui/react";
+import { requestPasswordReset } from "@/lib/auth-client";
 
+// eslint-disable-next-line @next/next/no-async-client-component
 const ForgotPasswordPage = () => {
     const hsndleForgotPassword = async (e) => {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
         const data = Object.fromEntries(formData.entries());
         console.log("Forgot Password Data:", data);
-  };
+        const resData = await requestPasswordReset({
+          email: data.email,
+          redirectTo: `${window.location.origin}/reset-password`,
+        })
+        toast.success("Password reset email sent!");
+        console.log("Password reset response:", resData);
+    }
 
     return (
         <div>
